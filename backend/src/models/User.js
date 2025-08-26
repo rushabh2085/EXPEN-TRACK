@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
+
+    name: {
+        type: String,
+        required: [true,'Name is required'],
+    },
     mobileNumber: {
         type: String,
         required: [true,'Mobile Number is required'],

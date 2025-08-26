@@ -5,6 +5,7 @@ import styles from './SignupPage.module.css'
 
 const SignupPage = () => {
 
+  const [name,setName] = useState('');
   const [mobileNumber,setMobileNumber] = useState('');
   const [password,setPassword] = useState('');
   const [loading,setLoading] = useState(false);
@@ -24,6 +25,7 @@ const SignupPage = () => {
       const url = 'http://localhost:5000/api/auth/register'
 
       const userData = {
+        name,
         mobileNumber,
         password,
       };
@@ -66,6 +68,21 @@ const SignupPage = () => {
 
         {error && <p style={{ color: 'red', textAlign: 'center', marginBottom: '10px' }}>{error}</p>}
         {success && <p style={{ color: 'green', textAlign: 'center', marginBottom: '10px' }}>{success}</p>}
+
+        <div className={styles.inputGroup}>
+          <label htmlFor='name' className={styles.label}>
+            Name
+          </label>
+          <input
+          type="name"
+          id="name"
+          placeholder='Enter your name'
+          className={styles.input}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          />
+        </div>
 
         <div className={styles.inputGroup}>
           <label htmlFor='mobile' className={styles.label}>

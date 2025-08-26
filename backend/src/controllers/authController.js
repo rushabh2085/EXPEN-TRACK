@@ -1,10 +1,11 @@
 const User = require('../models/User.js')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const { namehash } = require('ethers');
 const jwt = require('jsonwebtoken')
 
 //Generate Token Helper Function
-const generateToken = (id) => {
-    return jwt.sign({id}, process.env.JWT_SECRET, {
+const generateToken = (id, name) => {
+    return jwt.sign({ id, name }, process.env.JWT_SECRET, {
         expiresIn: '30d',
     });
 };
@@ -12,7 +13,7 @@ const generateToken = (id) => {
 //Register User Function
 const registerUser = async (req,res) => {
     try{
-        const {mobileNumber,password} = req.body;
+        const {name,mobileNumber,password} = req.body;
 
         const userExists = await User.findOne({mobileNumber});
         if(userExists){
@@ -22,12 +23,14 @@ const registerUser = async (req,res) => {
         const hashedPassword = await bcrypt.hash(password,salt);
 
         const user = await User.create({
+            name,
             mobileNumber,
             password: hashedPassword,
         });
         if(user){
             res.status(201).json({
                 _id: user._id,
+                name: user.name,
                 mobileNumber: user.mobileNumber,
                 message: "User registered successfully",
             });
@@ -53,8 +56,9 @@ const loginUser = async (req,res) => {
         if(user && (await bcrypt.compare(password, user.password))) {
             res.json({
                 _id: user._id,
+                name: user.name,
                 mobileNumber: user.mobileNumber,
-                token: generateToken(user._id),
+                token: generateToken(user._id, user.name),
             });
         }else {
             res.status(401).json({message: 'Invalid mobile number or password.'})

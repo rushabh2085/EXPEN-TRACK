@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import {Link} from 'react-router-dom';
+import React, { useState , useContext } from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import { AuthContext } from "../context/authContext";
 import axios from 'axios';
 import styles from './SignupPage.module.css';
 
@@ -11,6 +12,9 @@ const LoginPage = () => {
     const[loading,setLoading] = useState(false);
     const[error,setError] = useState('');
 
+    const {login} = useContext(AuthContext);
+    const navigate = useNavigate();
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError('');
@@ -21,10 +25,13 @@ const LoginPage = () => {
             const userData = { mobileNumber, password };
             const response = await axios.post(url, userData);
 
-            localStorage.setItem('authToken',response.data.token);
+            login(response.data.token);
+            navigate('/');
+
+            /* localStorage.setItem('authToken',response.data.token);
             console.log('Login Successfull! Token', response.data.token);
 
-            alert('Login Successfull!');
+            alert('Login Successfull!'); */
         }catch (err) {
 
             if (err.response) {
@@ -79,7 +86,7 @@ const LoginPage = () => {
         </div>
 
         <button type="submit" className={styles.button} disabled={loading}>
-          {loading ? 'Logging Up...' : 'Login'}
+          {loading ? 'Logging In...' : 'Login'}
         </button>
 
       </form>
