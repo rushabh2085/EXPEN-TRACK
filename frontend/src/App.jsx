@@ -1,34 +1,37 @@
-import React from "react";
+import React, { useContext } from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
+import { AuthProvider, AuthContext } from "./context/authContext";
+
 import Header from './components/Header';
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-import {BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom'
-import { AuthProvider } from "./context/authContext";
+import DashboardPage from "./pages/DashboardPage";
 
+const PrivateRoute = ({ children }) => {
+  const { user } = useContext(AuthContext);
 
-const Navigation = () => (
-  <nav>
-    <Link to ="/login">Login</Link>
-    <Link to ="/signup">Signup</Link>
-  </nav>
-);
+  // If there is a user, render the children components (the protected page).
+  // Otherwise, redirect them to the login page.
+  return user ? children : <Navigate to="/login" />;
+};
 
 function App() {
    
   return(
-    <AuthProvider>  
+      
     <Router>
+      <AuthProvider>
       <Header/>
-
-      <main>
+      <main style={{ padding: '20px' }}>
         <Routes>
         <Route path = "/login" element={<LoginPage/>} />
         <Route path = "/signup" element={<SignupPage/>} />
-        <Route path = "/" element={<SignupPage/>} />
+        <Route path = "/" element={ <PrivateRoute> <DashboardPage/> </PrivateRoute> }/>
         </Routes>
       </main>
+      </AuthProvider>
     </Router>
-    </AuthProvider>
+    
   );
 }
 export default App;

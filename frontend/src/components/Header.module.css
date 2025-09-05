@@ -1,5 +1,5 @@
 .header {
-  background-color: #d518d8;
+  background-color: #ed9134;
   padding: 1rem 0;
   border-bottom: 1px solid #e2e8f0;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.05);
@@ -34,7 +34,7 @@
 }
 
 .logoutButton {
-  background-color: #e53e3e;
+  background-color: #2971e4;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -45,6 +45,6 @@
 }
 
 .logoutButton:hover {
-  background-color: #c53030;
+  background-color: #2971e4;
 }
 
