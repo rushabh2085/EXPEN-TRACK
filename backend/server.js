@@ -6,6 +6,7 @@ const connectDB = require('./src/config/db');
 const pingRoute = require('./src/routes/ping');
 const authRoute = require('./src/routes/authRoutes');
 const errorHandler = require('./src/middlewares/errorHandler');
+const transactionRoutes = require('./src/routes/transactionRoutes.js')
 
 /* console.log('Type of pingRoute:', typeof pingRoute);
 console.log('Type of errorHandler:', typeof errorHandler); */
@@ -25,6 +26,7 @@ const PORT = process.env.PORT || 5000;
 //routes
 app.use('/api/ping',pingRoute);
 app.use('/api/auth',authRoute);
+app.use('/api/transactions', transactionRoutes);
 
 
 //errorHandling
