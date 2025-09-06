@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios';
 import styles from './AddTransaction.module.css';
 
 const AddTransaction = () => {
@@ -8,26 +9,67 @@ const AddTransaction = () => {
     const [type,setType] = useState('expense');
     const [category,setCategory] = useState('');
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    //states for loading and error
+    const [loading,setLoading] = useState(false);
+    const [error,setError] = useState('');
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+
         // we will send the data to the backend here
-        console.log({
-            description,
-            amount : parseFloat(amount),
-            type,
-            category,
-        })
-        // reset form fields after submission
-        setDescription('');
-        setAmount('');
-        setType('');
-        setCategory('');
+        try{
+            const token = localStorage.getItem('authToken');
+            if(!token) {
+                setError('You must be logged in to add transaction');
+                setLoading(false);
+                return;
+            }
+            // prepare data for api call
+            const transactionData = {
+                description,
+                amount: parseFloat(amount),
+                type,
+                category,
+            };
+            // prepare config for api call
+            const config = {
+                headers: {
+                    'Contect-Type': 'application/json',
+                    Authorization: `Bearer $(token)`, //including the token here
+                },
+            };
+
+            //send the data to the backend
+            const url = 'http://localhost:5000/api/transactions';
+            await axios.post(url, transactionData, config);
+
+            // reset form fields after submission
+            setDescription('');
+            setAmount('');
+            setType('');
+            setCategory('');
+
+            alert('Transaction added succesfully!');
+        }catch(err) {
+            if (err.response && err.response.data && err.response.data.message) {
+            setError(error);
+            }else if(err.code === 'ERR_NETWORK') {
+                setError('Network Error: Could not connect to the server.');
+            }else {
+                setError('Failed to add transaction. Please try again.');
+            }
+        }finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className={styles.formContainer}>
             <h3>Add New Transaction</h3>
             <form onSubmit = { handleSubmit }>
+                {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
                 <div className={styles.formControl}>
                     <label htmlFor="description">Description</label>
                     <input

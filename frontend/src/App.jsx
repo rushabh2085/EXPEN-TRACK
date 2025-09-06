@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
+import {  BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import { AuthProvider, AuthContext } from "./context/authContext";
 
 import Header from './components/Header';
@@ -15,6 +15,12 @@ const PrivateRoute = ({ children }) => {
   return user ? children : <Navigate to="/login" />;
 };
 
+const PublicRoute = ({ children }) => {
+  const { user } = useContext(AuthContext);
+  // If a user is logged in, redirect them away from login/signup to the dashboard
+  return user ? <Navigate to="/" /> : children;
+};
+
 function App() {
    
   return(
@@ -24,8 +30,8 @@ function App() {
       <Header/>
       <main style={{ padding: '20px' }}>
         <Routes>
-        <Route path = "/login" element={<LoginPage/>} />
-        <Route path = "/signup" element={<SignupPage/>} />
+        <Route path = "/login" element={ <PublicRoute><LoginPage/></PublicRoute> }/>
+        <Route path = "/signup" element={ <PublicRoute><SignupPage/></PublicRoute> } />
         <Route path = "/" element={ <PrivateRoute> <DashboardPage/> </PrivateRoute> }/>
         </Routes>
       </main>
