@@ -8,9 +8,6 @@ const authRoute = require('./src/routes/authRoutes');
 const errorHandler = require('./src/middlewares/errorHandler');
 const transactionRoutes = require('./src/routes/transactionRoutes.js')
 
-/* console.log('Type of pingRoute:', typeof pingRoute);
-console.log('Type of errorHandler:', typeof errorHandler); */
-
 const app = express();
 
 const corsOptions = {
@@ -21,7 +18,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 //routes
 app.use('/api/ping',pingRoute);
@@ -45,4 +42,4 @@ const startServer = async () => {
   }
 };
 
-startServer();
+startServer(); 

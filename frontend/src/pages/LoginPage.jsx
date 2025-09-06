@@ -21,7 +21,7 @@ const LoginPage = () => {
         setLoading(true);
 
         try {
-            const url = 'http://localhost:5000/api/auth/login';
+            const url = 'http://localhost:5001/api/auth/login';
             const userData = { mobileNumber, password };
             const response = await axios.post(url, userData);
 

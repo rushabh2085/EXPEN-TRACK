@@ -1,6 +1,5 @@
 const User = require('../models/User.js')
 const bcrypt = require('bcrypt');
-const { namehash } = require('ethers');
 const jwt = require('jsonwebtoken')
 
 //Generate Token Helper Function
@@ -8,7 +7,7 @@ const generateToken = (id, name) => {
     return jwt.sign({ id, name }, process.env.JWT_SECRET, {
         expiresIn: '30d',
     });
-};
+};  
 
 //Register User Function
 const registerUser = async (req,res) => {

@@ -36,13 +36,13 @@ const AddTransaction = () => {
             // prepare config for api call
             const config = {
                 headers: {
-                    'Contect-Type': 'application/json',
-                    Authorization: `Bearer $(token)`, //including the token here
+                    'Context-Type': 'application/json',
+                    Authorization: `Bearer ${token}`, //including the token here
                 },
             };
 
             //send the data to the backend
-            const url = 'http://localhost:5000/api/transactions';
+            const url = 'http://localhost:5001/api/transactions';
             await axios.post(url, transactionData, config);
 
             // reset form fields after submission
@@ -54,7 +54,7 @@ const AddTransaction = () => {
             alert('Transaction added succesfully!');
         }catch(err) {
             if (err.response && err.response.data && err.response.data.message) {
-            setError(error);
+            setError(err.response.data.message);
             }else if(err.code === 'ERR_NETWORK') {
                 setError('Network Error: Could not connect to the server.');
             }else {
