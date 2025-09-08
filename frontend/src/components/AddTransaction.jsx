@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from 'axios';
 import styles from './AddTransaction.module.css';
 
-const AddTransaction = () => {
+const AddTransaction = (/* { onTransactionAdded } */) => {
     // state for each input field
     const [description,setDescription] = useState('');
     const [amount,setAmount] = useState('');
@@ -52,6 +52,9 @@ const AddTransaction = () => {
             setCategory('');
 
             alert('Transaction added succesfully!');
+            /* if (onTransactionAdded) {
+                onTransactionAdded();
+            } */
         }catch(err) {
             if (err.response && err.response.data && err.response.data.message) {
             setError(err.response.data.message);

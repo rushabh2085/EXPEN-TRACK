@@ -15,7 +15,7 @@ const DashboardPage = () => {
         const token = localStorage.getItem('authToken');
         const config = {
           headers: {
-            Authorization: `Bearer{token}`,
+            Authorization: `Bearer ${token}`,
           },
         };
 
@@ -25,7 +25,7 @@ const DashboardPage = () => {
         setTransactions(response.data);
 
       }catch(err) {
-        setError(err);
+        setError('Failed to fetch transactions. Please try again.');
       }finally {
         setLoading(false);
       }
@@ -34,13 +34,18 @@ const DashboardPage = () => {
     fetchTransactions();
   }, []); //[] means the effect run only once
 
-  if(loading) {
+/*   const handleTransactionAdded = () => {
+    // This function can be passed to AddTransaction so it can trigger a refresh
+    fetchTransactions();
+  };  */ 
+
+  if (loading) {
     return <p> Loading transaction... </p>;
   }
-  else {
+  if (error) {
     return <p style={{ color: 'red' }}>{error}</p>;
   }
-  
+
     return (
     <div>
       <h1>My Dashboard</h1>
