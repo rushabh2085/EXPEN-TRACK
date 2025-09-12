@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import styles from './Dashboard.module.css'
 import AddTransaction from '../components/AddTransaction';
 import TransactionList from '../components/TransactionList';
+import TransactionChart from '../components/TransactionChart';
+import SummaryChart from '../components/SummaryChart';
 import Balance from '../components/Balance';
 
 const DashboardPage = () => {
@@ -51,6 +54,10 @@ const DashboardPage = () => {
     <div>
       <h1>My Dashboard</h1>
       <Balance transactions={ transactions }/>
+      <div className={styles.chartsWrapper}>
+        <SummaryChart transactions={transactions} />
+        <TransactionChart transactions={transactions} />
+      </div>
       <AddTransaction onTransactionAdded = { handleTransactionAdded }/>
       <TransactionList transactions = { transactions }/>
     </div>
