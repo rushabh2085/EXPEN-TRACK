@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AddTransaction from '../components/AddTransaction';
 import TransactionList from '../components/TransactionList';
+import Balance from '../components/Balance';
 
 const DashboardPage = () => {
 
@@ -9,8 +10,7 @@ const DashboardPage = () => {
   const [error,setError] = useState('');
   const [loading,setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchTransactions =async () => {
+    const fetchTransactions = async () => {
       try {
         const token = localStorage.getItem('authToken');
         const config = {
@@ -31,13 +31,14 @@ const DashboardPage = () => {
       }
     };
 
+    useEffect(() => {
     fetchTransactions();
   }, []); //[] means the effect run only once
 
-/*   const handleTransactionAdded = () => {
+   const handleTransactionAdded = () => {
     // This function can be passed to AddTransaction so it can trigger a refresh
     fetchTransactions();
-  };  */ 
+  }; 
 
   if (loading) {
     return <p> Loading transaction... </p>;
@@ -49,7 +50,8 @@ const DashboardPage = () => {
     return (
     <div>
       <h1>My Dashboard</h1>
-      <AddTransaction/>
+      <Balance transactions={ transactions }/>
+      <AddTransaction onTransactionAdded = { handleTransactionAdded }/>
       <TransactionList transactions = { transactions }/>
     </div>
   );

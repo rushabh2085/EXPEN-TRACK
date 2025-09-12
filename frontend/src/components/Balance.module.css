@@ -1,0 +1,62 @@
+.container {
+  margin-bottom: 30px;
+}
+
+.balance h1 {
+  font-size: 2.5rem;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.balance h4 {
+  margin: 0;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.positive {
+  color: #27ae60; /* Green */
+}
+
+.negative {
+  color: #c0392b; /* Red */
+}
+
+.summaryContainer {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 8px;
+}
+
+.summaryBox {
+  flex: 1;
+  text-align: center;
+}
+
+.summaryBox:first-of-type {
+  border-right: 1px solid #dedede;
+}
+
+.summaryBox h4 {
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.money {
+  font-size: 20px;
+  letter-spacing: 1px;
+  margin: 5px 0;
+}
+
+.income .money {
+  color: #27ae60;
+}
+
+.expense .money {
+  color: #c0392b;
+}
+
