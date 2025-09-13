@@ -41,3 +41,23 @@
   color: #777;
   margin-top: 20px;
 }
+
+deleteBtn {
+  cursor: pointer;
+  background-color: #e74c3c; /* Red */
+  border: 0;
+  color: #fff;
+  font-size: 20px;
+  line-height: 20px;
+  padding: 2px 5px;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(-100%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.list li:hover .deleteBtn {
+  opacity: 1;
+}

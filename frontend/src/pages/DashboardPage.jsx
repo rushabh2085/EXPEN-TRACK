@@ -43,6 +43,10 @@ const DashboardPage = () => {
     fetchTransactions();
   }; 
 
+    const handleTransactionDeleted = () => {
+    fetchTransactions();
+  };
+
   if (loading) {
     return <p> Loading transaction... </p>;
   }
@@ -59,7 +63,9 @@ const DashboardPage = () => {
         <TransactionChart transactions={transactions} />
       </div>
       <AddTransaction onTransactionAdded = { handleTransactionAdded }/>
-      <TransactionList transactions = { transactions }/>
+      <TransactionList transactions = { transactions }
+      onTransactionDeleted={ handleTransactionDeleted }
+      />
     </div>
   );
 };

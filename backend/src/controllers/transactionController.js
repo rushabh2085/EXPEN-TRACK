@@ -32,7 +32,25 @@ const addTransaction = asyncHandler(async ( req,res ) => {
         res.status(200).json(transactions);
 });
 
+const deleteTransaction = asyncHandler(async (req, res) => {
+    const transaction = await Transaction.findById(req.params.id);
+
+    if(!transaction) {
+        res.status(404);
+        throw new Error('Transaction not found');
+    }
+
+    if(transaction.user.toString() !== req.user.id) {
+        res.status(400);
+        throw new Error('User not authorized');
+    }
+
+    await transaction.deleteOne();
+    res.status(200).json({ id: req.params.id, message: 'Transaction removed'});
+});
+
 module.exports = {
     getTransactions,
     addTransaction,
+    deleteTransaction,
 }
