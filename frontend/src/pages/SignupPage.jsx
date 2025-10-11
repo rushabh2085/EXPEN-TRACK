@@ -1,130 +1,92 @@
-import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import styles from './SignupPage.module.css'
+import AuthLayout from '../components/AuthLayout'; // 1. Import the reusable layout
 
 const SignupPage = () => {
+  // We now need a state for the user's name
+  const [name, setName] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const [name,setName] = useState('');
-  const [mobileNumber,setMobileNumber] = useState('');
-  const [password,setPassword] = useState('');
-  const [loading,setLoading] = useState(false);
-  const [error,setError] = useState('');
-  const [success,setSuccess] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit =  async (event) => {
-
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
     setError('');
-    setSuccess('');
     setLoading(true);
-
     try {
-      
-      const url = 'http://localhost:5000/api/auth/register'
-
-      const userData = {
-        name,
-        mobileNumber,
-        password,
-      };
-
-      const response = await axios.post(url, userData);
-      setSuccess(response.data.message);
-
-    }catch(err) {
-
-      console.log('Error received from backend:', err.response);
-
-      if (err.response && err.response.data && err.response.data.message) {
-        // If the server sent a specific message (like our validation error), use it.
-        setError(err.response.data.message);
-      } else {
-        // This handles cases where no response was received (e.g., network error, CORS issue).
-        setError('Cannot connect to the server. Please try again later.');
-        console.error('Axios request failed:', err); // Log the full error for debugging.
-      }
+      const url = 'http://localhost:5001/api/auth/register';
+      // Include the name in the user data payload
+      const userData = { name, mobileNumber, password };
+      await axios.post(url, userData);
+      alert('Registration successful! Please log in.');
+      navigate('/login'); // Redirect to login page after successful registration
+    } catch (err) {
+      setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
-      // The 'finally' block runs whether the try or catch block succeeded.
-      // This is the perfect place to stop the loading indicator.
       setLoading(false);
     }
-
-      /* if(err.response && err.response.data && err.response.data.message){
-        setError(error.response.data.message);
-      }else {
-        setError('Registration Failed.Please try again.');
-      }
-      setLoading(false); */
-    
   };
 
-  return(
-    <div className={styles.container}>
-      <h2 className={styles.title}>Create Your Account</h2>
-
-      <form onSubmit={handleSubmit}>
-
-        {error && <p style={{ color: 'red', textAlign: 'center', marginBottom: '10px' }}>{error}</p>}
-        {success && <p style={{ color: 'green', textAlign: 'center', marginBottom: '10px' }}>{success}</p>}
-
-        <div className={styles.inputGroup}>
-          <label htmlFor='name' className={styles.label}>
-            Name
-          </label>
+  return (
+    // 2. Wrap everything in the AuthLayout
+    <AuthLayout title="Create Your Account">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {error && <p className="text-red-400 text-sm text-center bg-red-500/10 p-2 rounded-lg">{error}</p>}
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
           <input
-          type="name"
-          id="name"
-          placeholder='Enter your name'
-          className={styles.input}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
+            type="text"
+            placeholder='Enter your full name'
+            className="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500 text-white"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
           />
         </div>
 
-        <div className={styles.inputGroup}>
-          <label htmlFor='mobile' className={styles.label}>
-            Mobile Number
-          </label>
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Mobile Number</label>
           <input
-          type="tel"
-          id="mobile"
-          placeholder='Enter your 10 digit mobile number'
-          className={styles.input}
-          value={mobileNumber}
-          onChange={(e) => setMobileNumber(e.target.value)}
-          required
+            type="tel"
+            placeholder='Enter your 10 digit mobile number'
+            className="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500 text-white"
+            value={mobileNumber}
+            onChange={(e) => setMobileNumber(e.target.value)}
+            required
           />
         </div>
 
-        <div className={styles.inputGroup}>
-          <label htmlFor='password' className={styles.label}>
-            Password
-          </label>
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
           <input
-          type='password'
-          id='password'
-          placeholder='Enter your password'
-          className={styles.input}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+            type='password'
+            placeholder='Create a password'
+            className="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500 text-white"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </div>
 
-        <button type="submit" className={styles.button} disabled={loading}>
-          {loading ? 'Signing Up...' : 'Sign Up'}
+        <button type="submit" className="w-full py-3 bg-teal-500 hover:bg-teal-600 rounded-lg font-semibold text-white transition-colors disabled:opacity-50" disabled={loading}>
+          {loading ? 'Creating Account...' : 'Sign Up'}
         </button>
 
       </form>
-      <p className={styles.loginLink}>Already have an account? <Link to="/login">Login</Link>
+      <p className="text-center text-gray-400 mt-6">
+        Already have an account? 
+        <Link to="/login" className="font-medium text-teal-400 hover:underline ml-1">
+          Login
+        </Link>
       </p>
-    </div>
+    </AuthLayout>
   );
 };
 
 export default SignupPage;
-
 

@@ -5,6 +5,116 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
+  Title,  
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const SummaryChart = ({ transactions }) => {
+  const totalIncome = transactions
+    .filter(t => t.type === 'income')
+    .reduce((acc, t) => acc + t.amount, 0);
+
+  const totalExpenses = transactions
+    .filter(t => t.type === 'expense')
+    .reduce((acc, t) => acc + t.amount, 0);
+
+  const chartData = {
+    labels: ['Summary'],
+    datasets: [
+      {
+        label: 'Income',
+        data: [totalIncome],
+        backgroundColor: '#22c55e', // Green-500
+        borderColor: '#16a34a',     // Green-600
+        borderWidth: 2,
+        borderRadius: 4,
+      },
+      {
+        label: 'Expenses',
+        data: [totalExpenses],
+        backgroundColor: '#ef4444', // Red-500
+        borderColor: '#dc2626',     // Red-600
+        borderWidth: 2,
+        borderRadius: 4,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          color: '#d1d5db', // Gray-300 for legend text
+          font: { size: 14 }
+        }
+      },
+      tooltip: {
+        backgroundColor: '#374151',
+        titleColor: '#ffffff',
+        bodyColor: '#ffffff',
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)', // Lighter grid lines
+        },
+        ticks: {
+          color: '#d1d5db', // Gray-300 for Y-axis labels
+        },
+      },
+      x: {
+        grid: {
+          display: false, // Hide vertical grid lines
+        },
+        ticks: {
+          color: '#d1d5db', // Gray-300 for X-axis labels
+        },
+      },
+    },
+  };
+
+  return (
+    // We now use Tailwind classes for the "glassmorphism" card effect
+    <div className="bg-slate-800/40 backdrop-blur-xl border border-teal-500/20 rounded-2xl p-6 flex flex-col">
+      <h3 className="text-lg font-semibold text-center mb-4 text-gray-200">Income vs. Expenses</h3>
+      <div className="relative flex-grow">
+        {transactions.length > 0 ? (
+          <Bar options={chartOptions} data={chartData} />
+        ) : (
+          <p className="text-center text-gray-400 h-full flex items-center justify-center">
+            No data available to display a chart.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default SummaryChart;
+
+
+/* import React from 'react';
+import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
   Title,
   Tooltip,
   Legend,
@@ -74,3 +184,4 @@ const SummaryChart = ({ transactions }) => {
 };
 
 export default SummaryChart;
+ */

@@ -1,6 +1,86 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+const TransactionChart = ({ transactions }) => {
+  const expenses = transactions.filter(t => t.type === 'expense');
+
+  const expenseByCategory = expenses.reduce((acc, transaction) => {
+    const { category, amount } = transaction;
+    if (!acc[category]) {
+      acc[category] = 0;
+    }
+    acc[category] += amount;
+    return acc;
+  }, {});
+
+  const chartData = {
+    labels: Object.keys(expenseByCategory),
+    datasets: [
+      {
+        label: 'Expenses',
+        data: Object.values(expenseByCategory),
+        backgroundColor: [
+          '#14b8a6', // Teal
+          '#3b82f6', // Blue
+          '#f97316', // Orange
+          '#8b5cf6', // Violet
+          '#ec4899', // Pink
+          '#f59e0b', // Amber
+        ],
+        borderColor: '#1f2937', // A dark border for contrast
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          color: '#d1d5db', // Gray-300 for legend text
+          font: {
+            size: 14,
+          }
+        }
+      },
+      tooltip: {
+        backgroundColor: '#374151', // Gray-700 tooltip background
+        titleColor: '#ffffff',
+        bodyColor: '#ffffff',
+      }
+    },
+  };
+
+  return (
+    // We now use Tailwind classes for the "glassmorphism" card effect
+    <div className="bg-slate-800/40 backdrop-blur-xl border border-teal-500/20 rounded-2xl p-6 flex flex-col">
+      <h3 className="text-lg font-semibold text-center mb-4 text-gray-200">Expense Breakdown</h3>
+      <div className="relative flex-grow">
+        {expenses.length > 0 ? (
+          <Pie data={chartData} options={chartOptions} />
+        ) : (
+          <p className="text-center text-gray-400 h-full flex items-center justify-center">
+            No expense data to display a chart.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default TransactionChart;
+
+
+
+/* import React from 'react';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import styles from './TransactionChart.module.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -62,4 +142,4 @@ const TransactionChart = ({ transactions }) => {
 };
 
 export default TransactionChart;
-
+ */

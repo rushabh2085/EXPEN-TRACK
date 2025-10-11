@@ -1,4 +1,87 @@
-import React, { useState , useContext } from 'react';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from "../context/authContext";
+import axios from 'axios';
+import AuthLayout from '../components/AuthLayout'; // 1. Import the new layout
+
+const LoginPage = () => {
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError('');
+    setLoading(true);
+    try {
+      const url = 'http://localhost:5001/api/auth/login';
+      const userData = { mobileNumber, password };
+      const response = await axios.post(url, userData);
+      login(response.data.token);
+      navigate('/');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    // 2. Wrap the form in the new AuthLayout
+    <AuthLayout title="Welcome Back">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {error && <p className="text-red-400 text-sm text-center bg-red-500/10 p-2 rounded-lg">{error}</p>}
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Mobile Number</label>
+          <input
+            type="tel"
+            placeholder='Enter your 10 digit mobile number'
+            className="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500 text-white"
+            value={mobileNumber}
+            onChange={(e) => setMobileNumber(e.target.value)}
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
+          <input
+            type='password'
+            placeholder='Enter your password'
+            className="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500 text-white"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+
+        <button type="submit" className="w-full py-3 bg-teal-500 hover:bg-teal-600 rounded-lg font-semibold text-white transition-colors disabled:opacity-50" disabled={loading}>
+          {loading ? 'Logging In...' : 'Login'}
+        </button>
+
+      </form>
+      <p className="text-center text-gray-400 mt-6">
+        Don't have an account? 
+        <Link to="/signup" className="font-medium text-teal-400 hover:underline ml-1">
+          Sign Up
+        </Link>
+      </p>
+    </AuthLayout>
+  );
+};
+
+export default LoginPage;
+
+
+
+
+
+/* import React, { useState , useContext } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import { AuthContext } from "../context/authContext";
 import axios from 'axios';
@@ -28,10 +111,6 @@ const LoginPage = () => {
             login(response.data.token);
             navigate('/');
 
-            /* localStorage.setItem('authToken',response.data.token);
-            console.log('Login Successfull! Token', response.data.token);
-
-            alert('Login Successfull!'); */
         }catch (err) {
 
             if (err.response) {
@@ -95,4 +174,4 @@ const LoginPage = () => {
     </div>
   );
 };
-export default LoginPage;
+export default LoginPage; */
