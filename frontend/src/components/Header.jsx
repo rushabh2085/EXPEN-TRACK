@@ -12,38 +12,47 @@ const getGreeting = () => {
 const Header = ({ darkMode, setDarkMode, sidebarOpen, setSidebarOpen, theme }) => {
     const { user, logout } = useContext(AuthContext);
 
-    // If there's no user (on login page), render a simple header
-    if (!user) {
-        return (
-            <header className="dark:bg-slate-900 bg-slate-100 border-b dark:border-teal-500/20 border-slate-200">
-                <div className="flex items-center justify-between px-4 sm:px-6 py-3">
-                    <h1 className="text-xl sm:text-2xl font-bold">FinTrack</h1>
-                </div>
-            </header>
-        );
-    }
-
-    // If a user is logged in, render the full dashboard header
     return (
-        <header className={`${theme.glass} border-b ${theme.cardBorder} sticky top-0 z-40`}>
-            <div className="flex items-center justify-between px-4 sm:px-6 py-3">
+        <header className={`${user ? theme.glass : 'dark:bg-slate-900 bg-slate-100'} border-b ${theme.cardBorder} sticky top-0 z-40`}>
+            <div className="flex items-center justify-between px-4 sm:px-6 py-4">
                 <div className="flex items-center gap-4">
-                    <button onClick={() => setSidebarOpen(!sidebarOpen)} className={`p-2 rounded-lg ${theme.cardBg} hover:bg-slate-200 dark:hover:bg-teal-500/20 transition-colors lg:hidden`}>
-                        {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
-                    </button>
+                    {user && (
+                        <button 
+                            onClick={() => setSidebarOpen(!sidebarOpen)} 
+                            className={`p-2 rounded-lg ${theme.cardBg} hover:bg-slate-200 dark:hover:bg-teal-500/20 transition-colors`}
+                        >
+                            {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+                        </button>
+                    )}
                     <h1 className="text-xl sm:text-2xl font-bold">FinTrack</h1>
                 </div>
+                
                 <div className="flex items-center gap-4">
-                    <button onClick={() => setDarkMode(!darkMode)} className={`p-2 rounded-lg ${theme.cardBg} hover:bg-slate-200 dark:hover:bg-teal-500/20 transition-colors`}>
+                    <button 
+                        onClick={() => setDarkMode(!darkMode)} 
+                        className={`p-2 rounded-lg ${theme.cardBg} hover:bg-slate-200 dark:hover:bg-teal-500/20 transition-colors`}
+                    >
                         {darkMode ? <Sun size={20} /> : <Moon size={20} />}
                     </button>
-                    <div className="text-right hidden sm:block">
-                        <p className={`text-sm ${theme.mutedText}`}>{getGreeting()},</p>
-                        <p className="font-semibold">{user.name}</p>
-                    </div>
-                    <button onClick={logout} className={`p-2 rounded-lg ${theme.cardBg} hover:bg-red-500/20 transition-colors`}>
-                        <LogOut size={20} />
-                    </button>
+                    
+                    {user ? (
+                        <>
+                            <div className="text-right hidden sm:block">
+                                <p className={`text-sm ${theme.mutedText}`}>{getGreeting()},</p>
+                                <p className="font-semibold">{user.name}</p>
+                            </div>
+                            <button 
+                                onClick={logout} 
+                                className={`p-2 rounded-lg ${theme.cardBg} hover:bg-red-500/20 transition-colors`}
+                            >
+                                <LogOut size={20} />
+                            </button>
+                        </>
+                    ) : (
+                        <div className="text-right hidden sm:block">
+                            <p className={`text-sm ${theme.mutedText}`}>{getGreeting()}!</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </header>
@@ -51,6 +60,63 @@ const Header = ({ darkMode, setDarkMode, sidebarOpen, setSidebarOpen, theme }) =
 };
 
 export default Header;
+
+
+/* import React, { useContext } from 'react';
+import { AuthContext } from '../context/authContext';
+import { Menu, X, Sun, Moon, LogOut } from 'lucide-react';
+
+const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good Morning';
+    if (hour < 18) return 'Good Afternoon';
+    return 'Good Evening';
+};
+
+const Header = ({ darkMode, setDarkMode, sidebarOpen, setSidebarOpen, theme }) => {
+    const { user, logout } = useContext(AuthContext);
+
+    return (
+        <header className={`${user ? theme.glass : 'dark:bg-slate-900 bg-slate-100'} border-b ${theme.cardBorder} sticky top-0 z-40`}>
+            <div className="flex items-center justify-between px-4 sm:px-6 py-4"> 
+                <div className="flex items-center gap-4">
+                    {user && ( // Only show the hamburger button if the user is logged in
+                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className={`p-2 rounded-lg ${theme.cardBg} hover:bg-slate-200 dark:hover:bg-teal-500/20 transition-colors lg:hidden`}>
+                            {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+                        </button>
+                    )}
+                    <h1 className="text-xl sm:text-2xl font-bold">FinTrack</h1>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                    <button onClick={() => setDarkMode(!darkMode)} className={`p-2 rounded-lg ${theme.cardBg} hover:bg-slate-200 dark:hover:bg-teal-500/20 transition-colors`}>
+                        {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+                    </button>
+                    
+                    {user ? ( // If user is logged in, show the personalized greeting and logout button
+                        <>
+                            <div className="text-right hidden sm:block">
+                                <p className={`text-sm ${theme.mutedText}`}>{getGreeting()},</p>
+                                <p className="font-semibold">{user.name}</p>
+                            </div>
+                            <button onClick={logout} className={`p-2 rounded-lg ${theme.cardBg} hover:bg-red-500/20 transition-colors`}>
+                                <LogOut size={20} />
+                            </button>
+                        </>
+                    ) : ( // If no user, show the simple greeting
+                        <div className="text-right hidden sm:block">
+                            <p className={`text-sm ${theme.mutedText}`}>{getGreeting()}</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </header>
+    );
+};
+
+export default Header; */
+
+
 
 
 
