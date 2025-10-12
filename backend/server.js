@@ -10,9 +10,16 @@ const transactionRoutes = require('./src/routes/transactionRoutes.js')
 
 const app = express();
 
+const allowedOrigins = [process.env.CLIENT_URL, 'http://localhost:5173'];
 const corsOptions = {
-  origin: 'http://localhost:5173', 
-  optionsSuccessStatus: 200 // For legacy browser support
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
 };
 app.use(cors(corsOptions));
 app.use(express.json());
