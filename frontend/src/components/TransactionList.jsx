@@ -9,7 +9,7 @@ const TransactionList = ({ transactions, onTransactionDeleted, theme }) => {
       try {
         const token = localStorage.getItem('authToken');
         const config = { headers: { Authorization: `Bearer ${token}` } };
-        const url = `http://localhost:5001/api/transactions/${id}`;
+        const url = `${import.meta.env.VITE_API_URL}/api/transactions/${id}`;
         await axios.delete(url, config);
         if (onTransactionDeleted) onTransactionDeleted();
       } catch (error) {

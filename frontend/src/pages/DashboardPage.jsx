@@ -20,7 +20,7 @@ const DashboardPage = ({ theme }) => {
     try {
       const token = localStorage.getItem('authToken');
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const url = 'http://localhost:5001/api/transactions';
+      const url = `${import.meta.env.VITE_API_URL}/api/transactions`;
       const response = await axios.get(url, config);
       setTransactions(response.data);
     } catch (err) {

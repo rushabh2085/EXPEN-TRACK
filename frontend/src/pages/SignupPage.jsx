@@ -18,7 +18,7 @@ const SignupPage = () => {
     setError('');
     setLoading(true);
     try {
-      const url = 'http://localhost:5001/api/auth/register';
+      const url = `${import.meta.env.VITE_API_URL}/api/auth/register`;
       // Include the name in the user data payload
       const userData = { name, mobileNumber, password };
       await axios.post(url, userData);

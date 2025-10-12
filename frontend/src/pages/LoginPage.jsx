@@ -18,7 +18,7 @@ const LoginPage = () => {
     setError('');
     setLoading(true);
     try {
-      const url = 'http://localhost:5001/api/auth/login';
+      const url = `${import.meta.env.VITE_API_URL}/api/auth/login`;
       const userData = { mobileNumber, password };
       const response = await axios.post(url, userData);
       login(response.data.token);

@@ -22,7 +22,7 @@ const EditTransactionPage = () => {
       try {
         const token = localStorage.getItem('authToken');
         const config = { headers: { Authorization: `Bearer ${token}` } };
-        const url = `http://localhost:5001/api/transactions/${id}`;
+        const url = `${import.meta.env.VITE_API_URL}/api/transactions/${id}`;
         const { data } = await axios.get(url, config);
 
         // Pre-fill the form with the fetched data
@@ -48,7 +48,7 @@ const EditTransactionPage = () => {
     try {
       const token = localStorage.getItem('authToken');
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const url = `http://localhost:5001/api/transactions/${id}`;
+      const url = `${import.meta.env.VITE_API_URL}/api/transactions/${id}`;
       
       const updatedData = {
         description,
