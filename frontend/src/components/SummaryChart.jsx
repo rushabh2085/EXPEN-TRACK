@@ -34,16 +34,16 @@ const SummaryChart = ({ transactions }) => {
       {
         label: 'Income',
         data: [totalIncome],
-        backgroundColor: '#22c55e', // Green-500
-        borderColor: '#16a34a',     // Green-600
+        backgroundColor: '#4ade80', // Green-400
+        borderColor: '#22c55e',     // Green-500
         borderWidth: 2,
         borderRadius: 4,
       },
       {
         label: 'Expenses',
         data: [totalExpenses],
-        backgroundColor: '#ef4444', // Red-500
-        borderColor: '#dc2626',     // Red-600
+        backgroundColor: '#f87171', // Red-400
+        borderColor: '#ef4444',     // Red-500
         borderWidth: 2,
         borderRadius: 4,
       },

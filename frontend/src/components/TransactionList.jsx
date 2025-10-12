@@ -1,5 +1,81 @@
 import React from 'react';
 import axios from 'axios';
+import { Pencil, Trash2 } from 'lucide-react';
+
+const TransactionList = ({ transactions, onTransactionDeleted, onEdit, theme }) => {
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this transaction?')) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('authToken');
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      const url = `${import.meta.env.VITE_API_URL}/api/transactions/${id}`;
+      await axios.delete(url, config);
+      onTransactionDeleted();
+    } catch (err) {
+      alert('Failed to delete transaction. Please try again.');
+    }
+  };
+
+  if (!transactions || transactions.length === 0) {
+    return <p className={theme.mutedText}>No transactions yet. Add your first one!</p>;
+  }
+
+  return (
+    <div className="space-y-3">
+      {transactions.map((transaction) => (
+        <div
+          key={transaction._id}
+          className={`flex items-center justify-between p-4 rounded-lg ${theme.cardBg} border ${theme.cardBorder} hover:border-opacity-40 transition-all`}
+        >
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <div className={`w-1 h-12 rounded-full ${transaction.type === 'income' ? 'bg-green-500' : 'bg-red-500'}`} />
+              <div>
+                <p className="font-medium">{transaction.description}</p>
+                <p className={`text-sm ${theme.mutedText}`}>{transaction.category}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <span className={`font-bold text-lg ${transaction.type === 'income' ? 'text-green-400' : 'text-red-400'}`}>
+              {transaction.type === 'income' ? '+' : '-'}${Math.abs(transaction.amount).toFixed(2)}
+            </span>
+            
+            <div className="flex gap-2">
+              <button
+                onClick={() => onEdit(transaction._id)}
+                className="p-2 rounded-lg bg-blue-400/10 hover:bg-blue-400/20 text-blue-400 transition-colors"
+                title="Edit"
+              >
+                <Pencil size={16} />
+              </button>
+              <button
+                onClick={() => handleDelete(transaction._id)}
+                className="p-2 rounded-lg bg-red-400/10 hover:bg-red-400/20 text-red-400 transition-colors"
+                title="Delete"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default TransactionList;
+
+
+
+
+
+/* import React from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Trash2, Edit } from 'lucide-react';
 
@@ -52,7 +128,7 @@ const TransactionList = ({ transactions, onTransactionDeleted, theme }) => {
   );
 };
 
-export default TransactionList;
+export default TransactionList; */
 
 
 

@@ -7,9 +7,7 @@ import Header from './components/Header';
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import DashboardPage from "./pages/DashboardPage";
-import EditTransactionPage from "./pages/EditTransactionPage";
 
-// Sidebar Component
 const Sidebar = ({ sidebarOpen, setSidebarOpen, theme }) => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -31,7 +29,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, theme }) => {
 
     return (
         <>
-            {/* Mobile Overlay - MUST be before sidebar in DOM but LOWER z-index */}
             {sidebarOpen && (
                 <div 
                     className="fixed inset-0 bg-black/50 z-10 lg:hidden"
@@ -39,7 +36,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, theme }) => {
                 />
             )}
 
-            {/* Sidebar - HIGHER z-index than overlay */}
             <aside className={`fixed lg:sticky top-[73px] left-0 h-[calc(100vh-73px)] ${theme.glass} border-r ${theme.cardBorder} transition-all duration-300 z-20 ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0 lg:w-20'}`}>
                 <nav className="p-4 pt-8 space-y-2">
                     {menuItems.map((item) => {
@@ -61,7 +57,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, theme }) => {
     );
 };
 
-// Placeholder pages
 const IncomePage = ({ theme }) => (
     <div className="p-8">
         <h2 className="text-2xl font-bold mb-4">Income Tracker</h2>
@@ -140,7 +135,6 @@ const AppLayout = () => {
                         <Route path="/expenses" element={<PrivateRoute><ExpensesPage theme={theme} /></PrivateRoute>} />
                         <Route path="/settings" element={<PrivateRoute><SettingsPage theme={theme} /></PrivateRoute>} />
                         <Route path="/export" element={<PrivateRoute><ExportPage theme={theme} /></PrivateRoute>} />
-                        <Route path="/edit/:id" element={<PrivateRoute><EditTransactionPage theme={theme} /></PrivateRoute>} />
                     </Routes>
                 </main>
             </div>
