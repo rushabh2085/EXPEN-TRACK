@@ -32,7 +32,7 @@ const TransactionList = ({ transactions, onTransactionDeleted, onEdit, theme }) 
         >
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <div className={`w-1 h-12 rounded-full ${transaction.type === 'income' ? 'bg-green-500' : 'bg-red-500'}`} />
+              <div className={`w-1.5 h-10 rounded-full ${transaction.type === 'income' ? 'bg-green-400' : 'bg-red-400'}`} />
               <div>
                 <p className="font-medium">{transaction.description}</p>
                 <p className={`text-sm ${theme.mutedText}`}>{transaction.category}</p>
