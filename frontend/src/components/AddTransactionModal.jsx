@@ -18,7 +18,7 @@ const AddTransactionModal = ({ onClose, onTransactionAdded, theme }) => {
       const token = localStorage.getItem('authToken');
       const transactionData = { description, amount: parseFloat(amount), type, category };
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const url = 'http://localhost:5001/api/transactions';
+      const url = `${import.meta.env.VITE_API_URL}/api/transactions`;
       await axios.post(url, transactionData, config);
       onTransactionAdded();
     } catch (err) {
