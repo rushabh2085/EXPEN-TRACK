@@ -7,6 +7,8 @@ import Header from './components/Header';
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import DashboardPage from "./pages/DashboardPage";
+import IncomePage from './pages/IncomePage';
+import ExpensePage from './pages/ExpensePage';
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen, theme }) => {
     const navigate = useNavigate();
@@ -56,20 +58,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, theme }) => {
         </>
     );
 };
-
-const IncomePage = ({ theme }) => (
-    <div className="p-8">
-        <h2 className="text-2xl font-bold mb-4">Income Tracker</h2>
-        <p className={theme.mutedText}>View and manage all your income sources here.</p>
-    </div>
-);
-
-const ExpensesPage = ({ theme }) => (
-    <div className="p-8">
-        <h2 className="text-2xl font-bold mb-4">Expense Tracker</h2>
-        <p className={theme.mutedText}>Track and categorize your expenses here.</p>
-    </div>
-);
 
 const SettingsPage = ({ theme }) => (
     <div className="p-8">
@@ -132,7 +120,7 @@ const AppLayout = () => {
                         <Route path="/signup" element={<PublicRoute><SignupPage theme={theme} /></PublicRoute>} />
                         <Route path="/" element={<PrivateRoute><DashboardPage theme={theme} /></PrivateRoute>} />
                         <Route path="/income" element={<PrivateRoute><IncomePage theme={theme} /></PrivateRoute>} />
-                        <Route path="/expenses" element={<PrivateRoute><ExpensesPage theme={theme} /></PrivateRoute>} />
+                        <Route path="/expenses" element={<PrivateRoute><ExpensePage theme={theme} /></PrivateRoute>} />
                         <Route path="/settings" element={<PrivateRoute><SettingsPage theme={theme} /></PrivateRoute>} />
                         <Route path="/export" element={<PrivateRoute><ExportPage theme={theme} /></PrivateRoute>} />
                     </Routes>

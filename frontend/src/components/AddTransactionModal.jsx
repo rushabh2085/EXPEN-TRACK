@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { X } from 'lucide-react';
 
-const AddTransactionModal = ({ onClose, onTransactionAdded, theme }) => {
+const AddTransactionModal = ({ onClose, onTransactionAdded, theme, initialType = 'expense'}) => {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
-  const [type, setType] = useState('expense');
+  const [type, setType] = useState(initialType);
   const [category, setCategory] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
